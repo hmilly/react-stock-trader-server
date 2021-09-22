@@ -9,10 +9,8 @@ const index = require("./routes/index");
 const { companyStock, user } = require("./data")
 const {token} = require("./loginDetails")
 var request = require('request');
-
 app.use(index);
 // node app.js
-
 
 var requestOptions = {
   'url': `https://api.tiingo.com/iex/?tickers=sony,tsla,amzn,wmt,dis&token=${token}`,
@@ -29,7 +27,6 @@ const findPrice = (item) => {
 }
 
 const int = (socket) => {
-
   request(requestOptions,
     function (error, response, body) {
       JSON.parse(body).map(item => {
@@ -54,13 +51,10 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
     clearInterval(interval);
   });
-
 })
 
 const interval = setInterval(() => {
   int()
-}, 5000);
-
-
+}, 3500);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
