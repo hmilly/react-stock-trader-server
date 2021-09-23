@@ -6,8 +6,8 @@ const socketIo = require("socket.io");
 const io = socketIo(server)
 const port = process.env.PORT || 4001;
 const index = require("./routes/index");
-const { companyStock, user } = require("./data")
-const {token} = require("./loginDetails")
+const { companyStock } = require("./data")
+const { token } = require("./loginDetails")
 var request = require('request');
 app.use(index);
 // node app.js
@@ -45,12 +45,10 @@ const int = (socket) => {
 io.on("connection", (socket) => {
   int(socket)
   console.log("running!"),
-    io.emit("printUser", user)
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clearInterval(interval);
-  });
+    socket.on("disconnect", () => {
+      console.log("Client disconnected");
+      clearInterval(interval);
+    });
 })
 
 const interval = setInterval(() => {
