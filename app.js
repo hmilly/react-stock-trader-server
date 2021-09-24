@@ -6,11 +6,15 @@ const socketIo = require("socket.io");
 const io = socketIo(server)
 const port = process.env.PORT || 4001;
 const index = require("./routes/index");
-const { companyStock } = require("./data")
+const { companyStock, user, defaultUser } = require("./data")
 const { token } = require("./loginDetails")
 var request = require('request');
 app.use(index);
 // node app.js
+
+const update = (str) => {
+  console.log(str);
+}
 
 var requestOptions = {
   'url': `https://api.tiingo.com/iex/?tickers=sony,tsla,amzn,wmt,dis&token=${token}`,
@@ -43,12 +47,21 @@ const int = (socket) => {
 }
 
 io.on("connection", (socket) => {
+  console.log("running!")
   int(socket)
-  console.log("running!"),
-    socket.on("disconnect", () => {
-      console.log("Client disconnected");
-      clearInterval(interval);
-    });
+
+  io.emit("defaultUser", defaultUser)
+
+  socket.on('updateUser', (e1, e2, e3) => {
+    // update(e1)
+    // update(e2)
+    console.log(e3)
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
 })
 
 const interval = setInterval(() => {
